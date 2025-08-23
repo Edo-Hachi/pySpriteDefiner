@@ -5,5 +5,198 @@
     "created_by": "SpriteDefiner",
     "version": "3.0"
   },
-  "sprites": {}
+  "sprites": {
+    "8_0": {
+      "x": 8,
+      "y": 0,
+      "NAME": "CONTACT_A",
+      "ACT_NAME": "TRUE"
+    },
+    "16_0": {
+      "x": 16,
+      "y": 0,
+      "NAME": "CONTACT_A",
+      "ACT_NAME": "FALSE"
+    },
+    "24_0": {
+      "x": 24,
+      "y": 0,
+      "NAME": "CONTACT_B",
+      "ACT_NAME": "TRUE"
+    },
+    "32_0": {
+      "x": 32,
+      "y": 0,
+      "NAME": "CONTACT_B",
+      "ACT_NAME": "FALSE"
+    },
+    "40_0": {
+      "x": 40,
+      "y": 0,
+      "NAME": "COIL_STD",
+      "ACT_NAME": "TRUE"
+    },
+    "48_0": {
+      "x": 48,
+      "y": 0,
+      "NAME": "COIL_STD",
+      "ACT_NAME": "FALSE"
+    },
+    "56_0": {
+      "x": 56,
+      "y": 0,
+      "NAME": "COIL_REV",
+      "ACT_NAME": "TRUE"
+    },
+    "64_0": {
+      "x": 64,
+      "y": 0,
+      "NAME": "COIL_REV",
+      "ACT_NAME": "FALSE"
+    },
+    "8_8": {
+      "x": 8,
+      "y": 8,
+      "NAME": "LINK_TO_UP",
+      "ACT_NAME": "TRUE"
+    },
+    "16_8": {
+      "x": 16,
+      "y": 8,
+      "NAME": "LINK_TO_UP",
+      "ACT_NAME": "FALSE"
+    },
+    "24_8": {
+      "x": 24,
+      "y": 8,
+      "NAME": "LINK_FROM_DOWN",
+      "ACT_NAME": "TRUE"
+    },
+    "32_8": {
+      "x": 32,
+      "y": 8,
+      "NAME": "LINK_FROM_DOWN",
+      "ACT_NAME": "FALSE"
+    },
+    "40_8": {
+      "x": 40,
+      "y": 8,
+      "NAME": "LINK_HORZ",
+      "ACT_NAME": "TRUE"
+    },
+    "48_8": {
+      "x": 48,
+      "y": 8,
+      "NAME": "LINK_HORZ",
+      "ACT_NAME": "FALSE"
+    },
+    "56_8": {
+      "x": 56,
+      "y": 8,
+      "NAME": "LINK_VIRT",
+      "ACT_NAME": "TRUE"
+    },
+    "64_8": {
+      "x": 64,
+      "y": 8,
+      "NAME": "LINK_VIRT",
+      "ACT_NAME": "FALSE"
+    },
+    "72_8": {
+      "x": 72,
+      "y": 8,
+      "NAME": "LINK_BRANCH",
+      "ACT_NAME": "TRUE"
+    },
+    "80_8": {
+      "x": 80,
+      "y": 8,
+      "NAME": "LINK_BRANCH",
+      "ACT_NAME": "FALSE"
+    },
+    "8_16": {
+      "x": 8,
+      "y": 16,
+      "NAME": "DEL",
+      "ACT_NAME": "DEL"
+    },
+    "16_16": {
+      "x": 16,
+      "y": 16,
+      "NAME": "EMPTY",
+      "ACT_NAME": "EMPTY"
+    },
+    "72_0": {
+      "x": 72,
+      "y": 0,
+      "NAME": "TIMER",
+      "ACT_NAME": "TRUE"
+    },
+    "80_0": {
+      "x": 80,
+      "y": 0,
+      "NAME": "TIMER",
+      "ACT_NAME": "FALSE"
+    },
+    "88_0": {
+      "x": 88,
+      "y": 0,
+      "NAME": "COUNTER",
+      "ACT_NAME": "TRUE"
+    },
+    "96_0": {
+      "x": 96,
+      "y": 0,
+      "NAME": "COUNTER",
+      "ACT_NAME": "FALSE"
+    },
+    "104_0": {
+      "x": 104,
+      "y": 0,
+      "NAME": "RESET",
+      "ACT_NAME": "TRUE"
+    },
+    "112_0": {
+      "x": 112,
+      "y": 0,
+      "NAME": "RESET",
+      "ACT_NAME": "FALSE"
+    },
+    "120_0": {
+      "x": 120,
+      "y": 0,
+      "NAME": "ZRST",
+      "ACT_NAME": "TRUE"
+    },
+    "128_0": {
+      "x": 128,
+      "y": 0,
+      "NAME": "ZRST",
+      "ACT_NAME": "FALSE"
+    },
+    "136_0": {
+      "x": 136,
+      "y": 0,
+      "NAME": "D_DEV",
+      "ACT_NAME": "TRUE"
+    },
+    "144_0": {
+      "x": 144,
+      "y": 0,
+      "NAME": "D_DEV",
+      "ACT_NAME": "FALSE"
+    },
+    "152_0": {
+      "x": 152,
+      "y": 0,
+      "NAME": "COMP",
+      "ACT_NAME": "TRUE"
+    },
+    "160_0": {
+      "x": 160,
+      "y": 0,
+      "NAME": "COMP",
+      "ACT_NAME": "FALSE"
+    }
+  }
 }
