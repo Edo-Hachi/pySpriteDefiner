@@ -1,0 +1,9 @@
+{
+  "meta": {
+    "sprite_size": 8,
+    "resource_file": "./my_resource.pyxres",
+    "created_by": "SpriteDefiner",
+    "version": "3.0"
+  },
+  "sprites": {}
+}
