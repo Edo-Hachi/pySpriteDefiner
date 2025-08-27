@@ -434,8 +434,8 @@ class SpriteDefiner:
 
     def load_or_create_sprite_json(self, pyxres_file):
         """
-        :jp pyxresファイルに対応するJSONファイルを読み込み、存在しない場合は初期化して作成
-        :en Load JSON file corresponding to pyxres file, create initialized version if not exists
+        :jp pyxresファイルに対応するJSONファイルを読み込み、存在しない場合のみ_template.jsonから作成
+        :en Load JSON file corresponding to pyxres file, create from _template.json only if not exists
         """
         # JSONファイル名を生成（拡張子を .pyxres から .json に変更）
         json_file = os.path.splitext(pyxres_file)[0] + '.json'
@@ -446,17 +446,25 @@ class SpriteDefiner:
                 # 既存のJSONファイルを読み込み
                 with open(json_file, 'r', encoding='utf-8') as f:
                     self.sprite_data = json.load(f)
-                print(f"Loaded sprite definitions: {json_file}")
+                print(f"Loaded existing sprite definitions: {json_file}")
+                
+                # _primary_ からフィールド定義を取得してダイアログコントローラーに設定
+                self.update_dialog_fields_from_template()
+                
             else:
-                # 初期化状態のJSONを作成
+                # JSONファイルが存在しない場合のみ、_template.jsonから作成
                 self.sprite_data = self.create_initial_sprite_json(pyxres_file)
                 self.save_sprite_json()
-                print(f"Created initial sprite definitions: {json_file}")
+                print(f"Created new sprite definitions from template: {json_file}")
+                
+                # _primary_ からフィールド定義を取得してダイアログコントローラーに設定
+                self.update_dialog_fields_from_template()
                 
         except Exception as e:
             print(f"Error loading/creating sprite JSON: {e}")
             # エラー時は初期化状態で作成
             self.sprite_data = self.create_initial_sprite_json(pyxres_file)
+            self.update_dialog_fields_from_template()
 
     def create_initial_sprite_json(self, pyxres_file):
         """
@@ -477,7 +485,7 @@ class SpriteDefiner:
             # resource_fileを選択されたpyxresファイル名に変更
             template_data["meta"]["resource_file"] = os.path.basename(pyxres_file)
             
-            # _tmplate_ は特殊グループとして保持（削除しない）
+            # _primary_ は特殊グループとして保持（削除しない）
             # 変更されたデータを保存
             with open(json_file, 'w', encoding='utf-8') as f:
                 json.dump(template_data, f, indent=2, ensure_ascii=False)
@@ -495,7 +503,7 @@ class SpriteDefiner:
                     "version": "3.0"
                 },
                 "sprites": {
-                    "_tmplate_": {
+                    "_primary_": {
                         "x": 0,
                         "y": 0,
                         "NAME": "SpriteName",
@@ -530,17 +538,17 @@ class SpriteDefiner:
 
     def add_sprite_at_position(self, x, y):
         """
-        :jp 指定座標にスプライトを追加（_tmplate_の構造を参考に作成）
-        :en Add sprite at specified position (using _tmplate_ structure as reference)
+        :jp 指定座標にスプライトを追加（_primary_の構造を参考に作成）
+        :en Add sprite at specified position (using _primary_ structure as reference)
         """
         if not self.sprite_data:
             return
             
         sprite_key = f"{x}_{y}"
         
-        # _tmplate_ の構造を参考に新しいスプライトを作成
-        if "_tmplate_" in self.sprite_data["sprites"]:
-            template_sprite = self.sprite_data["sprites"]["_tmplate_"]
+        # _primary_ の構造を参考に新しいスプライトを作成
+        if "_primary_" in self.sprite_data["sprites"]:
+            template_sprite = self.sprite_data["sprites"]["_primary_"]
             new_sprite = template_sprite.copy()  # 全フィールドをコピー
             
             # 座標のみ更新
@@ -555,21 +563,21 @@ class SpriteDefiner:
             
             print(f"Added sprite at ({x}, {y}) with template structure")
         else:
-            print("Error: _tmplate_ not found in sprite data")
+            print("Error: _primary_ not found in sprite data")
 
     def update_all_sprites_structure(self):
         """
-        :jp _tmplate_の構造変更時に全スプライトの構造を同期
-        :en Synchronize all sprite structures when _tmplate_ structure changes
+        :jp _primary_の構造変更時に全スプライトの構造を同期
+        :en Synchronize all sprite structures when _primary_ structure changes
         """
-        if not self.sprite_data or "_tmplate_" not in self.sprite_data["sprites"]:
+        if not self.sprite_data or "_primary_" not in self.sprite_data["sprites"]:
             return
             
-        template_sprite = self.sprite_data["sprites"]["_tmplate_"]
+        template_sprite = self.sprite_data["sprites"]["_primary_"]
         
-        # 全スプライト（_tmplate_以外）の構造を更新
+        # 全スプライト（_primary_以外）の構造を更新
         for sprite_key, sprite_data in self.sprite_data["sprites"].items():
-            if sprite_key != "_tmplate_":
+            if sprite_key != "_primary_":
                 # 座標情報を保持
                 x = sprite_data.get("x", 0)
                 y = sprite_data.get("y", 0)
@@ -720,6 +728,48 @@ class SpriteDefiner:
             pyxel.rect(text_x, text_y, text_width + 4, pyxel.FONT_HEIGHT + 2, pyxel.COLOR_NAVY)
             
             pyxel.text(text_x + 2, text_y + 1, f"Selected: {sprite_key} (No Data)", pyxel.COLOR_WHITE)
+
+    def update_dialog_fields_from_template(self):
+        """
+        :jp _primary_ からフィールド定義を取得してダイアログコントローラーに設定
+        :en Get field definitions from _primary_ and set to dialog controller
+        """
+        if not self.sprite_data or "_primary_" not in self.sprite_data.get("sprites", {}):
+            print("Warning: _primary_ not found in sprite data")
+            return
+            
+        template_data = self.sprite_data["sprites"]["_primary_"]
+        
+        # x, y以外のフィールドを取得してfield_mappingsを動的に構築
+        field_mappings = {}
+        field_names = [key for key in template_data.keys() if key not in ["x", "y"]]
+        
+        # dialogs.jsonの固定ウィジェットIDとの対応（順序ベース）
+        fixed_widget_ids = [
+            "IDC_SPRITE_NAME",   # NAME用
+            "IDC_ACT_NAME",      # ACT_NAME用  
+            "IDC_ANIM_NUMBER",   # ANIM_NUMBER用
+            "IDC_ENPTY01",       # 4番目のフィールド用
+            "IDC_ENPTY02",       # 5番目のフィールド用
+            "IDC_ENPTY03",       # 6番目のフィールド用
+            "IDC_ENPTY04",       # 7番目のフィールド用
+            "IDC_ENPTY05",       # 8番目のフィールド用
+            "IDC_ENPTY06",       # 9番目のフィールド用
+            "IDC_ENPTY07",       # 10番目のフィールド用
+            "IDC_ENPTY08",       # 11番目のフィールド用
+            "IDC_ENPTY09",       # 12番目のフィールド用
+            "IDC_ENPTY10"        # 13番目のフィールド用
+        ]
+        
+        # フィールド名を固定ウィジェットIDに順序ベースでマッピング
+        for i, field_name in enumerate(field_names):
+            if i < len(fixed_widget_ids):
+                field_mappings[field_name] = fixed_widget_ids[i]
+        
+        # ダイアログコントローラーにフィールドマッピングを設定
+        self.sprite_edit_controller.field_mappings = field_mappings
+        
+        print(f"Updated dialog fields from template: {list(field_mappings.keys())}")
 
 
 if __name__ == "__main__":
